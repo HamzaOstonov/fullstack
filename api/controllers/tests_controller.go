@@ -29,6 +29,10 @@ func (server *Server) GetTestsAndVars(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
-	fmt.Fprintln(tests)
+
+	item1 := models.Test{ID: 1, Title: "Hamza aka"}
+	*tests = append(*tests, item1)
+
+	fmt.Println(tests)
 	responses.JSON(w, http.StatusOK, tests)
 }
