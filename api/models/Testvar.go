@@ -38,3 +38,16 @@ func (p *Testvar) FindAllTestvars(db *gorm.DB) (*[]Testvar, error) {
 	}
 	return &tests, err
 }
+
+func (p *Testvar) Find2(db *gorm.DB, hh int) (*[]Testvar, error) {
+	var err error
+	posts := []Testvar{}
+	//err = db.Debug().Model(&Post{}).Limit(100).Find(&posts).Error
+	err = db.Debug().Model(&Testvar{}).Where("id = ?", hh).Take(&Testvar{}).Error
+
+	if err != nil {
+		return &[]Testvar{}, err
+	}
+	return &posts, err
+
+}
