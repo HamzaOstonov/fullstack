@@ -18,3 +18,19 @@ type General struct {
 	Title     string     `gorm:"size:255;not null;unique" json:"title"`
 	Questions []Question `json:"questions"`
 }
+
+type Javob struct {
+	Javobnum  string
+	Javobtext string
+}
+
+type Savol struct {
+	Savolnum  string
+	Savoltext string
+	Javoblar  []Javob
+}
+
+type Kattatest struct {
+	Mavzu    string
+	Savollar []Savol
+}

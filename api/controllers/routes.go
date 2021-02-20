@@ -29,5 +29,6 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/tests2", middlewares.SetMiddlewareJSON(s.GetTestsAndVars)).Methods("GET")
 	s.Router.HandleFunc("/testsvars", middlewares.SetMiddlewareJSON(s.GetTestsVars)).Methods("GET")
 	s.Router.HandleFunc("/test", middlewares.SetMiddlewareJSON(s.GetTest)).Methods("GET")
+	s.Router.HandleFunc("/GetKattaTest", middlewares.SetMiddlewareJSON(s.GetKattaTest)).Methods("GET")
 
 }

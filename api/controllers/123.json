@@ -1,0 +1,45 @@
+{
+    "title": "",
+    "questions": [
+        {
+            "id": 0,
+            "text": "savolni eshitinb javobini toping",
+            "type": "mc",
+            "answers": [
+                "Javob ha",
+                "javob yuq"
+            ],
+            "answer": ""
+        },
+        {
+            "id": 0,
+            "text": "boshqa savolni eshitamiz",
+            "type": "mc",
+            "answers": [
+                "Javob ha",
+                "javob yuq"
+            ],
+            "answer": ""
+        },
+        {
+            "id": 0,
+            "text": "yana bir savol-da",
+            "type": "mc",
+            "answers": [
+                "Javob ha",
+                "javob yuq"
+            ],
+            "answer": ""
+        },
+        {
+            "id": 0,
+            "text": "bu ham savol",
+            "type": "mc",
+            "answers": [
+                "Javob ha",
+                "javob yuq"
+            ],
+            "answer": ""
+        }
+    ]
+}

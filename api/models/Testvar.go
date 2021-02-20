@@ -51,3 +51,17 @@ func (p *Testvar) Find2(db *gorm.DB, hh int) (*[]Testvar, error) {
 	return &posts, err
 
 }
+
+func (p *Testvar) Find3(db *gorm.DB, hh uint64) (*[]Testvar, error) {
+	var err error
+	posts := []Testvar{}
+	//err = db.Debug().Model(&Post{}).Limit(100).Find(&posts).Error
+	err = db.Debug().Model(&Testvar{}).Where("idx_id = ?", hh).Find(&posts).Error
+	//db.Where("name <> ?", "jinzhu").Find(&users)
+
+	if err != nil {
+		return &[]Testvar{}, err
+	}
+	return &posts, err
+
+}

@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/victorsteven/fullstack/api/models"
 	"github.com/victorsteven/fullstack/api/responses"
@@ -107,4 +108,86 @@ func (server *Server) GetTest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(testvars)
 
 	responses.JSON(w, http.StatusOK, general)
+}
+
+func (server *Server) GetKattaTest(w http.ResponseWriter, r *http.Request) {
+
+	//general := models.General{}
+	kattatest := models.Kattatest{}
+	savollar := []models.Savol{}
+	savol := models.Savol{}
+	javoblar := []models.Javob{}
+	javob := models.Javob{}
+
+	test := models.Test{}
+	//-----------
+	savol.Savolnum = "001"
+	savol.Savoltext = "tugri javobni topingda"
+
+	javob.Javobnum = "1"
+	javob.Javobtext = "savol1"
+	javoblar = append(javoblar, javob)
+
+	javob.Javobnum = "2"
+	javob.Javobtext = "savol2"
+	javoblar = append(javoblar, javob)
+
+	savol.Javoblar = javoblar
+
+	savollar = append(savollar, savol)
+	//-------------
+	savol.Savolnum = "002"
+	savol.Savoltext = "no0tugri javobni topingda"
+	javoblar = []models.Javob{}
+
+	javob.Javobnum = "3"
+	javob.Javobtext = "savol3"
+	javoblar = append(javoblar, javob)
+
+	javob.Javobnum = "4"
+	javob.Javobtext = "savol4"
+	javoblar = append(javoblar, javob)
+
+	savol.Javoblar = javoblar
+
+	savollar = append(savollar, savol)
+
+	//savollarni bazada olamiz
+	tests, err := test.FindAllTests(server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	for i := 0; i < len(*tests); i++ {
+		savol = models.Savol{}
+
+		savol.Savolnum = strconv.FormatUint((*tests)[i].ID, 10)
+		savol.Savoltext = (*tests)[i].Title
+
+		javoblar = []models.Javob{}
+
+		testvar := models.Testvar{}
+		testvars, err := testvar.Find3(server.DB, (*tests)[i].ID)
+		if err != nil {
+			responses.ERROR(w, http.StatusInternalServerError, err)
+			return
+		}
+		fmt.Println(len(*testvars))
+		for j := 0; j < len(*testvars); j++ {
+			javob.Javobnum = strconv.FormatUint((*testvars)[j].ID, 10)
+			javob.Javobtext = (*testvars)[j].VariantText
+			javoblar = append(javoblar, javob)
+
+			fmt.Println("javob.Javobnum =" + strconv.FormatUint((*testvars)[j].ID, 10) + ", text= " + (*testvars)[j].VariantText)
+		}
+		savol.Javoblar = javoblar
+		savollar = append(savollar, savol)
+
+	}
+
+	kattatest.Mavzu = "Geometriya"
+	kattatest.Savollar = savollar
+
+	responses.JSON(w, http.StatusOK, kattatest)
 }
