@@ -31,4 +31,7 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/test", middlewares.SetMiddlewareJSON(s.GetTest)).Methods("GET")
 	s.Router.HandleFunc("/GetKattaTest", middlewares.SetMiddlewareJSON(s.GetKattaTest)).Methods("GET")
 
+	//register user
+	s.Router.HandleFunc("/register", middlewares.SetMiddlewareJSON(s.Register)).Methods("POST")
+
 }
