@@ -79,17 +79,33 @@ func (server *Server) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println(user.Email, user.Password)
-	/*user.Prepare()
-	err = user.Validate("login")
+	user.Prepare()
+	err = user.Validate("")
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		fmt.Println(err)
+
 		return
 	}
-	token, err := server.SignIn(user.Email, user.Password)
+
+	userCreated, err := user.SaveUser(server.DB)
+	if err != nil {
+
+		formattedError := formaterror.FormatError(err.Error())
+
+		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		return
+	}
+	fmt.Println(userCreated.Email, userCreated.Password)
+
+	token, err := server.SignIn(userCreated.Email, userCreated.Password)
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
 		responses.ERROR(w, http.StatusUnprocessableEntity, formattedError)
 		return
-	}*/
-	responses.JSON(w, http.StatusOK, "token")
+	}
+	fmt.Println(token)
+
+	responses.JSON(w, http.StatusOK, token)
+
 }
