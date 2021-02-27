@@ -98,7 +98,7 @@ func (server *Server) Register(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(userCreated.Email, userCreated.Password)
 
-	token, err := server.SignIn(userCreated.Email, userCreated.Password)
+	token, err := auth.CreateToken(userCreated.ID)
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
 		responses.ERROR(w, http.StatusUnprocessableEntity, formattedError)
@@ -106,6 +106,6 @@ func (server *Server) Register(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(token)
 
-	responses.JSON(w, http.StatusOK, token)
+	responses.JSON(w, http.StatusOK, models.Userresp{Auth: true, Token: token, User: *userCreated})
 
 }
