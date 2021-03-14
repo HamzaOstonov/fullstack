@@ -12,11 +12,13 @@ var users = []models.User{
 		Nickname: "Steven victor",
 		Email:    "steven@gmail.com",
 		Password: "password",
+		Is_admin: 0,
 	},
 	models.User{
-		Nickname: "Martin Luther",
-		Email:    "luther@gmail.com",
-		Password: "password",
+		Nickname: "Hamza Ostonov",
+		Email:    "hamza_ost@mail.ru",
+		Password: "123",
+		Is_admin: 0,
 	},
 }
 

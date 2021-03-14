@@ -125,11 +125,11 @@ func (server *Server) GetKattaTest(w http.ResponseWriter, r *http.Request) {
 	savol.Savoltext = "tugri javobni topingda"
 
 	javob.Javobnum = "1"
-	javob.Javobtext = "savol1"
+	javob.Javobtext = "Javob 1"
 	javoblar = append(javoblar, javob)
 
 	javob.Javobnum = "2"
-	javob.Javobtext = "savol2"
+	javob.Javobtext = "Javob 2"
 	javoblar = append(javoblar, javob)
 
 	savol.Javoblar = javoblar
@@ -141,11 +141,11 @@ func (server *Server) GetKattaTest(w http.ResponseWriter, r *http.Request) {
 	javoblar = []models.Javob{}
 
 	javob.Javobnum = "3"
-	javob.Javobtext = "savol3"
+	javob.Javobtext = "javob3"
 	javoblar = append(javoblar, javob)
 
 	javob.Javobnum = "4"
-	javob.Javobtext = "savol4"
+	javob.Javobtext = "javob4"
 	javoblar = append(javoblar, javob)
 
 	savol.Javoblar = javoblar
@@ -183,7 +183,6 @@ func (server *Server) GetKattaTest(w http.ResponseWriter, r *http.Request) {
 		}
 		savol.Javoblar = javoblar
 		savollar = append(savollar, savol)
-
 	}
 
 	kattatest.Mavzu = "Geometriya"
