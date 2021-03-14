@@ -28,6 +28,8 @@ type Savol struct {
 	Savolnum  string
 	Savoltext string
 	Javoblar  []Javob
+	Jav1      string
+	Jav2      string
 }
 
 type Kattatest struct {
