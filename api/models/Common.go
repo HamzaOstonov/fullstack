@@ -25,11 +25,12 @@ type Javob struct {
 }
 
 type Savol struct {
-	Savolnum  string
-	Savoltext string
-	Javoblar  []Javob
-	Jav1      string
-	Jav2      string
+	Savolnum   string
+	Savoltext  string
+	Javoblar   []Javob
+	Jav1       string
+	Jav2       string
+	Tugrijavob string
 }
 
 type Kattatest struct {

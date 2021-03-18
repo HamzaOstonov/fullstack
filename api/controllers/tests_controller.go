@@ -7,6 +7,7 @@ import (
 
 	"github.com/victorsteven/fullstack/api/models"
 	"github.com/victorsteven/fullstack/api/responses"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func (server *Server) GetTests(w http.ResponseWriter, r *http.Request) {
@@ -110,6 +111,10 @@ func (server *Server) GetTest(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, general)
 }
 
+func Hash(password string) ([]byte, error) {
+	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+}
+
 func (server *Server) GetKattaTest(w http.ResponseWriter, r *http.Request) {
 
 	//general := models.General{}
@@ -164,6 +169,12 @@ func (server *Server) GetKattaTest(w http.ResponseWriter, r *http.Request) {
 
 		savol.Savolnum = strconv.FormatUint((*tests)[i].ID, 10)
 		savol.Savoltext = (*tests)[i].Title
+
+		hashedTugrijavob, err := Hash((*tests)[i].Answer_code)
+		if err != nil {
+			return
+		}
+		savol.Tugrijavob = string(hashedTugrijavob)
 
 		javoblar = []models.Javob{}
 

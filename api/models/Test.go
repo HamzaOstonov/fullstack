@@ -9,8 +9,9 @@ import (
 )
 
 type Test struct {
-	ID    uint64 `gorm:"primary_key;auto_increment" json:"id"`
-	Title string `gorm:"size:255;not null;unique" json:"title"`
+	ID          uint64 `gorm:"primary_key;auto_increment" json:"id"`
+	Title       string `gorm:"size:255;not null;unique" json:"title"`
+	Answer_code string `gorm:"not null" json:"Trueansw"`
 }
 
 func (p *Test) Prepare() {
