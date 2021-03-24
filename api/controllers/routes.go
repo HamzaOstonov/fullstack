@@ -25,6 +25,7 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/posts/{id}", middlewares.SetMiddlewareAuthentication(s.DeletePost)).Methods("DELETE")
 
 	//Tests
+	s.Router.HandleFunc("/tests", middlewares.SetMiddlewareJSON(s.CreateTest)).Methods("POST")
 	s.Router.HandleFunc("/tests", middlewares.SetMiddlewareJSON(s.GetTests)).Methods("GET")
 	s.Router.HandleFunc("/tests2", middlewares.SetMiddlewareJSON(s.GetTestsAndVars)).Methods("GET")
 	s.Router.HandleFunc("/testsvars", middlewares.SetMiddlewareJSON(s.GetTestsVars)).Methods("GET")
