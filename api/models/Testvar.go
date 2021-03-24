@@ -29,6 +29,21 @@ func (p *Testvar) Validate() error {
 	return nil
 }
 
+func (p *Testvar) SaveTestvar(db *gorm.DB) (*Testvar, error) {
+	var err error
+	err = db.Debug().Model(&Savol{}).Create(&p).Error
+	if err != nil {
+		return &Testvar{}, err
+	}
+	/*if p.ID != 0 {
+		err = db.Debug().Model(&User{}).Where("id = ?", p.AuthorID).Take(&p.Author).Error
+		if err != nil {
+			return &Post{}, err
+		}
+	}*/
+	return p, nil
+}
+
 func (p *Testvar) FindAllTestvars(db *gorm.DB) (*[]Testvar, error) {
 	var err error
 	tests := []Testvar{}

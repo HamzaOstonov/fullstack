@@ -9,6 +9,7 @@ import (
 
 	"github.com/victorsteven/fullstack/api/models"
 	"github.com/victorsteven/fullstack/api/responses"
+	"github.com/victorsteven/fullstack/api/utils/formaterror"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -172,7 +173,7 @@ func (server *Server) GetKattaTest(w http.ResponseWriter, r *http.Request) {
 		savol.Savolnum = strconv.FormatUint((*tests)[i].ID, 10)
 		savol.Savoltext = (*tests)[i].Title
 
-		hashedTugrijavob, err := Hash((*tests)[i].Answer_code)
+		hashedTugrijavob, err := Hash(strconv.FormatUint((*tests)[i].Answer_code, 10))
 		if err != nil {
 			return
 		}
@@ -212,12 +213,16 @@ func (server *Server) CreateTest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	post := models.Savol{}
+
 	err = json.Unmarshal(body, &post)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
 	fmt.Println(post)
+
+	test := models.Test{}
+	test.Title = post.Savoltext
 
 	/*post.Prepare()
 	err = post.Validate()
@@ -233,13 +238,42 @@ func (server *Server) CreateTest(w http.ResponseWriter, r *http.Request) {
 	if uid != post.AuthorID {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
-	}
-	postCreated, err := post.SavePost(server.DB)
+	}*/
+	postCreated, err := test.SaveTest(server.DB)
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, postCreated.ID))
-	responses.JSON(w, http.StatusCreated, postCreated)*/
+	fmt.Println(postCreated)
+
+	testvar := models.Testvar{}
+
+	for j := 0; j < len(post.Javoblar); j++ {
+		testvar.VariantText = post.Javoblar[j].Javobtext
+		testvar.IdxID = postCreated.ID
+		testvar.ID = 0
+
+		ansCreated, err := testvar.SaveTestvar(server.DB)
+		if err != nil {
+			formattedError := formaterror.FormatError(err.Error())
+			responses.ERROR(w, http.StatusInternalServerError, formattedError)
+			return
+		}
+		fmt.Println(ansCreated)
+		if post.Javoblar[j].Javobsign == "1" {
+			fmt.Println(int(ansCreated.ID))
+
+			postCreated, err = test.UpdateTestAnswer(server.DB, postCreated.ID, ansCreated.ID)
+			if err != nil {
+				formattedError := formaterror.FormatError(err.Error())
+				responses.ERROR(w, http.StatusInternalServerError, formattedError)
+				return
+			}
+			fmt.Println(postCreated)
+		}
+	}
+
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%s", r.Host, r.URL.Path, postCreated.Title))
+	responses.JSON(w, http.StatusCreated, postCreated)
 }

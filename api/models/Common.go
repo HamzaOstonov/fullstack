@@ -22,6 +22,7 @@ type General struct {
 type Javob struct {
 	Javobnum  string
 	Javobtext string
+	Javobsign string
 }
 
 type Savol struct {
@@ -29,7 +30,6 @@ type Savol struct {
 	Savoltext  string
 	Javoblar   []Javob
 	Jav1       string
-	Jav2       string
 	Tugrijavob string
 }
 
