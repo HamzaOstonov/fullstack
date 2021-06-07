@@ -1,0 +1,428 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.1.1
+-- Dumped by pg_dump version 9.1.1
+-- Started on 2021-06-07 11:02:54
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 1893 (class 1262 OID 11912)
+-- Dependencies: 1892
+-- Name: postgres; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON DATABASE postgres IS 'default administrative connection database';
+
+
+--
+-- TOC entry 170 (class 3079 OID 11638)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 1896 (class 0 OID 0)
+-- Dependencies: 170
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
+-- TOC entry 169 (class 3079 OID 16384)
+-- Name: adminpack; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS adminpack WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 1897 (class 0 OID 0)
+-- Dependencies: 169
+-- Name: EXTENSION adminpack; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION adminpack IS 'administrative functions for PostgreSQL';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 168 (class 1259 OID 41237)
+-- Dependencies: 1873 1874 5
+-- Name: posts; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE posts (
+    id bigint NOT NULL,
+    title character varying(255) NOT NULL,
+    content character varying(255) NOT NULL,
+    author_id integer,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.posts OWNER TO postgres;
+
+--
+-- TOC entry 167 (class 1259 OID 41235)
+-- Dependencies: 168 5
+-- Name: posts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE posts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.posts_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 1898 (class 0 OID 0)
+-- Dependencies: 167
+-- Name: posts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE posts_id_seq OWNED BY posts.id;
+
+
+--
+-- TOC entry 1899 (class 0 OID 0)
+-- Dependencies: 167
+-- Name: posts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('posts_id_seq', 2, true);
+
+
+--
+-- TOC entry 161 (class 1259 OID 24793)
+-- Dependencies: 5
+-- Name: tests; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE tests (
+    id bigint NOT NULL,
+    title character varying,
+    answer character varying,
+    answer_code character varying,
+    answer_num character varying
+);
+
+
+ALTER TABLE public.tests OWNER TO postgres;
+
+--
+-- TOC entry 162 (class 1259 OID 24799)
+-- Dependencies: 5 161
+-- Name: tests_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE tests_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tests_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 1900 (class 0 OID 0)
+-- Dependencies: 162
+-- Name: tests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE tests_id_seq OWNED BY tests.id;
+
+
+--
+-- TOC entry 1901 (class 0 OID 0)
+-- Dependencies: 162
+-- Name: tests_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('tests_id_seq', 4, true);
+
+
+--
+-- TOC entry 163 (class 1259 OID 24801)
+-- Dependencies: 5
+-- Name: testvars; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE testvars (
+    id bigint NOT NULL,
+    idx_id bigint,
+    variant_num character varying,
+    variant_code character varying,
+    variant_text character varying
+);
+
+
+ALTER TABLE public.testvars OWNER TO postgres;
+
+--
+-- TOC entry 164 (class 1259 OID 24807)
+-- Dependencies: 5 163
+-- Name: testvars_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE testvars_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.testvars_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 1902 (class 0 OID 0)
+-- Dependencies: 164
+-- Name: testvars_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE testvars_id_seq OWNED BY testvars.id;
+
+
+--
+-- TOC entry 1903 (class 0 OID 0)
+-- Dependencies: 164
+-- Name: testvars_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('testvars_id_seq', 16, true);
+
+
+--
+-- TOC entry 166 (class 1259 OID 41222)
+-- Dependencies: 1869 1870 1871 5
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE users (
+    id bigint NOT NULL,
+    nickname character varying(255) NOT NULL,
+    email character varying(100) NOT NULL,
+    password character varying(100) NOT NULL,
+    is_admin bigint DEFAULT 0,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- TOC entry 165 (class 1259 OID 41220)
+-- Dependencies: 5 166
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 1904 (class 0 OID 0)
+-- Dependencies: 165
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE users_id_seq OWNED BY users.id;
+
+
+--
+-- TOC entry 1905 (class 0 OID 0)
+-- Dependencies: 165
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('users_id_seq', 2, true);
+
+
+--
+-- TOC entry 1872 (class 2604 OID 41240)
+-- Dependencies: 167 168 168
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE posts ALTER COLUMN id SET DEFAULT nextval('posts_id_seq'::regclass);
+
+
+--
+-- TOC entry 1866 (class 2604 OID 24809)
+-- Dependencies: 162 161
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE tests ALTER COLUMN id SET DEFAULT nextval('tests_id_seq'::regclass);
+
+
+--
+-- TOC entry 1867 (class 2604 OID 24810)
+-- Dependencies: 164 163
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE testvars ALTER COLUMN id SET DEFAULT nextval('testvars_id_seq'::regclass);
+
+
+--
+-- TOC entry 1868 (class 2604 OID 41225)
+-- Dependencies: 166 165 166
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- TOC entry 1889 (class 0 OID 41237)
+-- Dependencies: 168
+-- Data for Name: posts; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY posts (id, title, content, author_id, created_at, updated_at) FROM stdin;
+1	Title 1	Hello world 1	1	2021-04-12 10:47:04.476532+05	2021-04-12 10:47:04.476532+05
+2	Title 2	Hello world 2	2	2021-04-12 10:47:04.855554+05	2021-04-12 10:47:04.855554+05
+\.
+
+
+--
+-- TOC entry 1886 (class 0 OID 24793)
+-- Dependencies: 161
+-- Data for Name: tests; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tests (id, title, answer, answer_code, answer_num) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1887 (class 0 OID 24801)
+-- Dependencies: 163
+-- Data for Name: testvars; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY testvars (id, idx_id, variant_num, variant_code, variant_text) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1888 (class 0 OID 41222)
+-- Dependencies: 166
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY users (id, nickname, email, password, is_admin, created_at, updated_at) FROM stdin;
+1	Steven victor	steven@gmail.com	$2a$10$AWKzEfKpDlHGg7RT/hFrVuFaicHh3EChqLnzOCx7zM7P1eJNyViJa	0	2021-04-12 10:47:04.418529+05	2021-04-12 10:47:04.418529+05
+2	Hamza Ostonov	hamza_ost@mail.ru	$2a$10$43bFOH/wjbpVfA4lUCk0H.yZfF2VKnRLZmf9pGKFfl4PUBYA36kvW	0	2021-04-12 10:47:04.710546+05	2021-04-12 10:47:04.710546+05
+\.
+
+
+--
+-- TOC entry 1882 (class 2606 OID 41247)
+-- Dependencies: 168 168
+-- Name: posts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY posts
+    ADD CONSTRAINT posts_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1884 (class 2606 OID 41249)
+-- Dependencies: 168 168
+-- Name: posts_title_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY posts
+    ADD CONSTRAINT posts_title_key UNIQUE (title);
+
+
+--
+-- TOC entry 1876 (class 2606 OID 41234)
+-- Dependencies: 166 166
+-- Name: users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_email_key UNIQUE (email);
+
+
+--
+-- TOC entry 1878 (class 2606 OID 41232)
+-- Dependencies: 166 166
+-- Name: users_nickname_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_nickname_key UNIQUE (nickname);
+
+
+--
+-- TOC entry 1880 (class 2606 OID 41230)
+-- Dependencies: 166 166
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1885 (class 2606 OID 41250)
+-- Dependencies: 166 168 1879
+-- Name: posts_author_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY posts
+    ADD CONSTRAINT posts_author_id_fkey FOREIGN KEY (author_id) REFERENCES users(id);
+
+
+--
+-- TOC entry 1895 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2021-06-07 11:02:55
+
+--
+-- PostgreSQL database dump complete
+--
+
