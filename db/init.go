@@ -3,6 +3,7 @@ package db
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
@@ -18,5 +19,8 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+	db.SetMaxIdleConns(5)
+	db.SetMaxOpenConns(3)
+	db.SetConnMaxLifetime(time.Minute * 5)
 	Method = &Postgres{db: db}
 }
